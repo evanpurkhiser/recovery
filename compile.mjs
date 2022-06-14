@@ -110,6 +110,7 @@ async function main() {
     <!DOCTYPE html>
     <html>
       <head>
+        <meta charset="utf-8" />
         <title>Evan's Recovery</title>
         <style>${css}</style>
       </head>
