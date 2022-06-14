@@ -1,5 +1,6 @@
 import util from 'node:util';
 import {exec} from 'node:child_process';
+import {promises as fs} from 'node:fs';
 import {webcrypto as crypto} from 'node:crypto';
 
 import showdown from 'showdown';
@@ -11,6 +12,13 @@ const asyncExec = util.promisify(exec);
  * The 1Password ID of the recovery website
  */
 const RECOVERY_ITEM_ID = '4bd2tue2hzqyokai2jaxpeypse';
+
+/**
+ * Options for converting the markdown to HTML
+ */
+const showdownOptions = {
+  simpleLineBreaks: true,
+};
 
 /**
  * Options used to minify the HTML
@@ -92,19 +100,28 @@ async function main() {
   const passphrase = item.fields.find(field => field.label === 'decryption key').value;
 
   // Convert markdown to HTML
-  const conv = new showdown.Converter({metadata: true});
+  const conv = new showdown.Converter(showdownOptions);
   const mdHtml = conv.makeHtml(md);
 
+  const css = fs.readFile('styles.css', 'utf8');
+
+  const template = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Evan's Recovery</title>
+        <style>${css}</style>
+      </head>
+      <body>${mdHtml}</body>
+    </html>`;
+
   // Minify the HTML
-  const html = await minify(mdHtml, minifyOptions);
+  const html = await minify(template, minifyOptions);
 
   // Encrypt the HTML using the passphrase
   const encryptedHtml = await encryptData(html, passphrase);
 
-  // Wrap to 80 characters for easy reading
-  const wrapped = encryptedHtml.replace(/(.{1,80})/g, '$1\n');
-
-  console.log(wrapped);
+  console.log(encryptedHtml);
 }
 
 main();
