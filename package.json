@@ -1,0 +1,13 @@
+{
+  "name": "recovery-website",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "html-minifier-terser": "^7.0.0-beta.0",
+    "showdown": "^2.1.0"
+  },
+  "volta": {
+    "node": "18.3.0",
+    "yarn": "1.22.4"
+  }
+}
