@@ -41,4 +41,4 @@ scenario.
 
 2. Deploy the `worker.js` to cloudflare.
 
-3. Set the environment variables as described above.
+3. Run `make` and set the environment variables as described above.
