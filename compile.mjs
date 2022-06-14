@@ -1,4 +1,5 @@
 import util from 'node:util';
+import {exit} from 'node:process';
 import {exec} from 'node:child_process';
 import {promises as fs} from 'node:fs';
 import {webcrypto as crypto} from 'node:crypto';
@@ -90,7 +91,7 @@ async function main() {
     await asyncExec('op vault list');
   } catch {
     console.error('Authenticate with the onepassword CLI `op signin`');
-    return;
+    exit(1);
   }
 
   const result = await asyncExec(`op item get ${RECOVERY_ITEM_ID} --format=json`);
