@@ -16,9 +16,7 @@ const RECOVERY_ITEM_ID = '4bd2tue2hzqyokai2jaxpeypse';
 /**
  * Options for converting the markdown to HTML
  */
-const showdownOptions = {
-  simpleLineBreaks: true,
-};
+const showdownOptions = {};
 
 /**
  * Options used to minify the HTML
@@ -103,7 +101,7 @@ async function main() {
   const conv = new showdown.Converter(showdownOptions);
   const mdHtml = conv.makeHtml(md);
 
-  const css = fs.readFile('styles.css', 'utf8');
+  const css = await fs.readFile('styles.css', 'utf8');
 
   const template = `
     <!DOCTYPE html>
@@ -121,7 +119,8 @@ async function main() {
   // Encrypt the HTML using the passphrase
   const encryptedHtml = await encryptData(html, passphrase);
 
-  console.log(encryptedHtml);
+  // Avoid newline in pbcopy
+  process.stdout.write(encryptedHtml);
 }
 
 main();
