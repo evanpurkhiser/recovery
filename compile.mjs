@@ -3,6 +3,7 @@ import {exec} from 'node:child_process';
 import {promises as fs} from 'node:fs';
 import {webcrypto as crypto} from 'node:crypto';
 
+import {gzip} from 'node-gzip';
 import showdown from 'showdown';
 import {minify} from 'html-minifier-terser';
 
@@ -66,7 +67,7 @@ async function encryptData(secretData, password) {
   const encryptedContent = await crypto.subtle.encrypt(
     {name: 'AES-GCM', iv},
     aesKey,
-    encoder.encode(secretData)
+    secretData
   );
 
   const encryptedContentArr = new Uint8Array(encryptedContent);
@@ -115,9 +116,10 @@ async function main() {
 
   // Minify the HTML
   const html = await minify(template, minifyOptions);
+  const gzHtml = await gzip(html);
 
   // Encrypt the HTML using the passphrase
-  const encryptedHtml = await encryptData(html, passphrase);
+  const encryptedHtml = await encryptData(gzHtml, passphrase);
 
   // Avoid newline in pbcopy
   process.stdout.write(encryptedHtml);

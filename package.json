@@ -4,6 +4,7 @@
   "license": "MIT",
   "dependencies": {
     "html-minifier-terser": "^7.0.0-beta.0",
+    "node-gzip": "^1.1.2",
     "showdown": "^2.1.0"
   },
   "volta": {

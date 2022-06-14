@@ -9,7 +9,6 @@
 const encryptionIterations = 100_000;
 
 const encoder = new TextEncoder();
-const decoder = new TextDecoder();
 
 const base64ToBuffer = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(null));
 
@@ -44,7 +43,7 @@ async function decryptData(encryptedData, password) {
     aesKey,
     data
   );
-  return decoder.decode(decryptedContent);
+  return decryptedContent;
 }
 
 async function handleRequest(request) {
@@ -70,11 +69,12 @@ async function handleRequest(request) {
   try {
     const html = await decryptData(ENCRYPTED_WEBSITE, passphrase);
     const headers = new Headers([
+      ['Content-Encoding', 'gzip'],
       ['Content-Type', 'text/html'],
       ['Cache-Control', 'no-store'],
     ]);
 
-    return new Response(html, {status: 200, headers});
+    return new Response(html, {status: 200, headers, encodeBody: 'manual'});
   } catch {}
 
   return new Response('Unauthorized', {status: 401});
