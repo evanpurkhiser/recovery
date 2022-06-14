@@ -8,6 +8,9 @@ The tools in this repository provide me with a static password protected
 "recovery" website that is hosted via Cloudflare Workers, which will help me in
 the event that I lose access to all my digital devices.
 
+Hopefully I'll never have to access this website. But it's there for a disaster
+scenario.
+
 ### How does this work?
 
 - I store a markdown document inside my 1Password that contains various
@@ -15,7 +18,7 @@ the event that I lose access to all my digital devices.
   contacts should I need to immediately contact someone.
 
 - The `compile.mjs` script extracts the markdown document from the secure
-  note in 1Password along with an additional passphrase from the Secure Note.
+  Note in 1Password along with an additional passphrase from the Secure Note.
   It then encrypts this document using AES encryption and base64s the content
   and writes it to stdout.
 
@@ -31,5 +34,11 @@ the event that I lose access to all my digital devices.
   When the worker is invoked, the provided password is used to attempt to
   decrypt the `ENCRYPTED_WEBSITE` content. If successful, the website is rendered.
 
-Hopefully I'll never have to access this website. But it's there for a disaster
-scenario.
+### How to use this
+
+1. Ensure the `RECOVERY_ITEM_ID` matches the Secure Note in 1Password
+   containing the markdown file.
+
+2. Deploy the `worker.js` to cloudflare.
+
+3. Set the environment variables as described above.
