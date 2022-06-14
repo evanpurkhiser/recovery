@@ -17,7 +17,9 @@ const RECOVERY_ITEM_ID = '4bd2tue2hzqyokai2jaxpeypse';
 /**
  * Options for converting the markdown to HTML
  */
-const showdownOptions = {};
+const showdownOptions = {
+  openLinksInNewWindow: true,
+};
 
 /**
  * Options used to minify the HTML
