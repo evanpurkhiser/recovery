@@ -28,8 +28,8 @@ scenario.
   Worker](https://workers.cloudflare.com/), which is given 2 important
   environment variables
 
-  1.  `USERNAME`: This is the username that is used for authentication
-  2.  `ENCRYPTED_WEBSITE`: This is the result of `compile.mjs`.
+  `USERNAME`: This is the username that is used for authentication.
+  `ENCRYPTED_WEBSITE`: This is the result of `compile.mjs`.
 
   When the worker is invoked, the provided password is used to attempt to
   decrypt the `ENCRYPTED_WEBSITE` content. If successful, the website is rendered.
