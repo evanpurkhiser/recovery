@@ -69,7 +69,10 @@ async function handleRequest(request) {
   // Attempt to decode the website with the provided passphrase
   try {
     const html = await decryptData(ENCRYPTED_WEBSITE, passphrase);
-    const headers = new Headers([['Content-Type', 'text/html']]);
+    const headers = new Headers([
+      ['Content-Type', 'text/html'],
+      ['Cache-Control', 'no-store'],
+    ]);
 
     return new Response(html, {status: 200, headers});
   } catch {}
