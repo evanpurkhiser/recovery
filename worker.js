@@ -46,13 +46,13 @@ async function decryptData(encryptedData, password) {
   return decryptedContent;
 }
 
+const reauthResponse = new Response('Authorization Required', {status: 401});
+reauthResponse.headers.set('WWW-Authenticate', 'Basic');
+
 async function handleRequest(request) {
   // No authorization passed, request authorization
   if (!request.headers.has('authorization')) {
-    const response = new Response('Authorization Required', {status: 401});
-    response.headers.set('WWW-Authenticate', 'Basic');
-
-    return response;
+    return reauthResponse;
   }
 
   const authorization = request.headers.get('authorization');
@@ -77,7 +77,7 @@ async function handleRequest(request) {
     return new Response(html, {status: 200, headers, encodeBody: 'manual'});
   } catch {}
 
-  return new Response('Unauthorized', {status: 401});
+  return reauthResponse;
 }
 
 addEventListener('fetch', event => event.respondWith(handleRequest(event.request)));
