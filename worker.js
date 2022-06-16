@@ -66,7 +66,7 @@ async function handleRequest(request) {
 
   // Invalid username
   if (username !== USERNAME) {
-    return new Response('Unauthorized', {status: 401});
+    return reauthorize();
   }
 
   // Attempt to decode the website with the provided passphrase
