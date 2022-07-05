@@ -3,6 +3,8 @@
  *
  * - USERNAME - The username to authenticate as
  * - ENCRYPTED_WEBSITE - The content output from `compile.mjs`
+ * - TELEGRAM_TOKEN - The telgram bot token to use for access notifications
+ * - TELEGRAM_CHAT_ID - The chat ID to post notifications into
  */
 
 // Cloudflare webworkers only support 100k iterations.
@@ -53,6 +55,21 @@ function reauthorize() {
   return response;
 }
 
+function notifyTelegram(text) {
+  const token = TELEGRAM_TOKEN;
+  const chatId = TELEGRAM_CHAT_ID;
+
+  const params = new URLSearchParams({
+    text,
+    chat_id: chatId,
+    parse_mode: 'MarkdownV2',
+  });
+
+  try {
+    return fetch(`https://api.telegram.org/bot${token}/sendMessage?${params.toString()}`);
+  } catch {}
+}
+
 async function handleRequest(request) {
   // No authorization passed, request authorization
   if (!request.headers.has('authorization')) {
@@ -66,6 +83,7 @@ async function handleRequest(request) {
 
   // Invalid username
   if (username !== USERNAME) {
+    await notifyTelegram('*Recovery Website:* Invalid username attempt');
     return reauthorize();
   }
 
@@ -78,8 +96,12 @@ async function handleRequest(request) {
       ['Cache-Control', 'no-store'],
     ]);
 
+    await notifyTelegram('*Recovery Website:* ACCESS GRANTED');
+
     return new Response(html, {status: 200, headers, encodeBody: 'manual'});
   } catch {}
+
+  await notifyTelegram('*Recovery Website:* Invalid password attempt');
 
   return reauthorize();
 }
