@@ -22,7 +22,7 @@ scenario.
   It then encrypts this document using AES encryption and base64s the content
   and writes it to stdout.
 
-  This comiler also handles converting the markdown document to HTML + CSS.
+  This compiler also handles converting the markdown document to HTML + CSS.
 
 - A `worker.js` file is uploaded to a [Cloudflare
   Worker](https://workers.cloudflare.com/), which is given 2 important
