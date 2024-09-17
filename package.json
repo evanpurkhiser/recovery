@@ -1,14 +1,22 @@
 {
   "name": "recovery",
-  "version": "1.0.0",
-  "license": "MIT",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240821.1",
+    "@evanpurkhiser/eslint-config": "^0.20.0",
+    "eslint": "^8.45.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.2",
+    "wrangler": "^3.60.3"
+  },
   "dependencies": {
-    "html-minifier-terser": "^7.0.0-beta.0",
+    "html-minifier-terser": "^7.2.0",
     "node-gzip": "^1.1.2",
     "showdown": "^2.1.0"
   },
   "volta": {
-    "node": "18.11.0",
+    "node": "20.17.0",
     "yarn": "1.22.19"
   }
 }

@@ -17,14 +17,14 @@ scenario.
   details about how to recover my digital life, along with some important
   contacts should I need to immediately contact someone.
 
-- The `compile.mjs` script extracts the markdown document from the secure
-  Note in 1Password along with an additional passphrase from the Secure Note.
-  It then encrypts this document using AES encryption and base64s the content
-  and writes it to stdout.
+- The `src/compiler/compile.mjs` script extracts the markdown document from the
+  secure Note in 1Password along with an additional passphrase from the Secure
+  Note. It then encrypts this document using AES encryption and base64s the
+  content and writes it to stdout.
 
   This compiler also handles converting the markdown document to HTML + CSS.
 
-- A `worker.js` file is uploaded to a [Cloudflare
+- A `src/worker/index.ts` file is uploaded to a [Cloudflare
   Worker](https://workers.cloudflare.com/), which is given 2 important
   environment variables
 
@@ -39,6 +39,7 @@ scenario.
 1. Ensure the `RECOVERY_ITEM_ID` matches the Secure Note in 1Password
    containing the markdown file.
 
-2. Deploy the `worker.js` to cloudflare.
+2. Ensure the `wrangler.toml` matches your desired worker deployment
+   configuration.
 
-3. Run `make` and set the environment variables as described above.
+2. Deploy the worker and configuration using `make deploy`.

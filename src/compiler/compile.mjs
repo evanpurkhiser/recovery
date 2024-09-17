@@ -1,10 +1,10 @@
 import util from 'node:util';
-import {exit} from 'node:process';
 import {exec} from 'node:child_process';
 import {promises as fs} from 'node:fs';
 import {webcrypto as crypto} from 'node:crypto';
-
+import path from 'node:path';
 import {gzip} from 'node-gzip';
+
 import showdown from 'showdown';
 import {minify} from 'html-minifier-terser';
 
@@ -87,13 +87,6 @@ async function encryptData(secretData, password) {
 }
 
 async function main() {
-  try {
-    await asyncExec('op vault list');
-  } catch {
-    console.error('Authenticate with the onepassword CLI `op signin`');
-    exit(1);
-  }
-
   const result = await asyncExec(`op item get ${RECOVERY_ITEM_ID} --format=json`);
   const item = JSON.parse(result.stdout);
 
@@ -105,7 +98,7 @@ async function main() {
   const conv = new showdown.Converter(showdownOptions);
   const mdHtml = conv.makeHtml(md);
 
-  const css = await fs.readFile('styles.css', 'utf8');
+  const css = await fs.readFile(path.resolve('src/compiler/styles.css'), 'utf8');
 
   const template = `
     <!DOCTYPE html>
