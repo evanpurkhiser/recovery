@@ -9,5 +9,4 @@ pattern = "recovery.evanpurkhiser.com"
 custom_domain = true
 
 [vars]
-USERNAME = "evan"
 TELEGRAM_CHAT_ID = "-722956237"
