@@ -1,14 +1,13 @@
-import util from 'node:util';
-import {exec} from 'node:child_process';
-import {promises as fs} from 'node:fs';
-import {webcrypto as crypto} from 'node:crypto';
-import path from 'node:path';
-import {gzip} from 'node-gzip';
-
-import showdown from 'showdown';
 import {minify} from 'html-minifier-terser';
+import {exec} from 'node:child_process';
+import {webcrypto as crypto} from 'node:crypto';
+import {promises as fs} from 'node:fs';
+import {resolve} from 'node:path';
+import {promisify} from 'node:util';
+import {gzip} from 'node-gzip';
+import showdown from 'showdown';
 
-const asyncExec = util.promisify(exec);
+const asyncExec = promisify(exec);
 
 /**
  * The 1Password ID of the recovery website
@@ -76,7 +75,7 @@ async function encryptData(secretData, password) {
   const encryptedContentArr = new Uint8Array(encryptedContent);
 
   // Pack the encrypted data with the salt and iv
-  let buff = new Uint8Array(
+  const buff = new Uint8Array(
     salt.byteLength + iv.byteLength + encryptedContentArr.byteLength
   );
   buff.set(salt, 0);
@@ -98,7 +97,7 @@ async function main() {
   const conv = new showdown.Converter(showdownOptions);
   const mdHtml = conv.makeHtml(md);
 
-  const css = await fs.readFile(path.resolve('src/compiler/styles.css'), 'utf8');
+  const css = await fs.readFile(resolve('src/compiler/styles.css'), 'utf8');
 
   const template = `
     <!DOCTYPE html>
