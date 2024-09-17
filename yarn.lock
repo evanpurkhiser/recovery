@@ -2435,6 +2435,11 @@ synckit@^0.9.1:
     "@pkgr/core" "^0.1.0"
     tslib "^2.6.2"
 
+telegram-escape@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/telegram-escape/-/telegram-escape-1.1.1.tgz#1fbabd6ce80bb47d0dd557b30248711af60d8f8f"
+  integrity sha512-FyQ2Czz5H2sq0alNSeXUJ9+oBfT62PxTaQx7Wx0eqieh//6cp6w9DnAlbmUtoHrAjnGId0K2xmHjbzmyi8SUVw==
+
 terser@^5.15.1:
   version "5.33.0"
   resolved "https://registry.yarnpkg.com/terser/-/terser-5.33.0.tgz#8f9149538c7468ffcb1246cfec603c16720d2db1"

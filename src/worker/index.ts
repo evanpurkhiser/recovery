@@ -1,3 +1,5 @@
+import {escapeMarkdown} from 'telegram-escape';
+
 export interface Env {
   /**
    * The username to authenticate as.
@@ -73,27 +75,8 @@ function reauthorize() {
 }
 
 /**
- * Send a message via telegram
+ * Main worker request handler
  */
-function notifyTelegram(env: Env, text: string) {
-  const token = env.TELEGRAM_TOKEN;
-  const chatId = env.TELEGRAM_CHAT_ID;
-
-  const params = new URLSearchParams({
-    text,
-    chat_id: chatId,
-    parse_mode: 'MarkdownV2',
-  });
-
-  try {
-    return fetch(`https://api.telegram.org/bot${token}/sendMessage?${params.toString()}`);
-  } catch {
-    // Nothing to do if we failed
-  }
-
-  return null;
-}
-
 const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => {
   const authorization = request.headers.get('authorization');
 
@@ -105,9 +88,55 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => 
   // Extract the username and password from the authorization header
   const [username, passphrase] = atob(authorization.split(' ')[1]).split(':');
 
+  const details = {
+    location: `${request.cf?.city}, ${request.cf?.region}, ${request.cf?.country}`,
+    address: request.headers.get('x-real-ip'),
+    platform: JSON.parse(request.headers.get('sec-ch-ua-platform') ?? '"unknown"'),
+    client: request.headers.get('user-agent'),
+  };
+
+  const prettyDetails = `
+🏷️ ${username}
+📍 ${details.location}
+🛜 ${details.address}
+🖥️ ${details.platform}
+🌐 ${details.client}`;
+
+  /**
+   * Send a message via telegram
+   */
+  async function notifyTelegram(text: string) {
+    const token = env.TELEGRAM_TOKEN;
+    const chatId = env.TELEGRAM_CHAT_ID;
+
+    const data = {
+      text: `*Recovery Website:* ${text}\n${escapeMarkdown(prettyDetails)}`,
+      chat_id: chatId,
+      parse_mode: 'MarkdownV2',
+    };
+
+    const options: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {'content-type': 'application/json'},
+    };
+
+    try {
+      const test = await fetch(
+        `https://api.telegram.org/bot${token}/sendMessage`,
+        options
+      );
+      console.log(await test.json());
+    } catch {
+      // Nothing to do if we failed
+    }
+
+    return null;
+  }
+
   // Invalid username
   if (username !== env.USERNAME) {
-    await notifyTelegram(env, '*Recovery Website:* Invalid username attempt');
+    await notifyTelegram('Invalid username attempt');
     return reauthorize();
   }
 
@@ -120,15 +149,14 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => 
       ['Cache-Control', 'no-store'],
     ]);
 
-    await notifyTelegram(env, `*Recovery Website:* ACCESS GRANTED\n\nTEST`);
+    await notifyTelegram('ACCESS GRANTED');
 
     return new Response(html, {status: 200, headers, encodeBody: 'manual'});
   } catch {
     // Nothing to do if we failed to decrypt
   }
 
-  await notifyTelegram(env, '*Recovery Website:* Invalid password attempt');
-
+  await notifyTelegram('Invalid password attempt');
   return reauthorize();
 };
 
