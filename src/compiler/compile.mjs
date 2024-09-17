@@ -105,6 +105,7 @@ async function main() {
     <html>
       <head>
         <meta charset="utf-8" />
+        <link rel="icon" href="data:;base64,=">
         <title>Evan's Recovery</title>
         <style>${css}</style>
       </head>
