@@ -42,4 +42,4 @@ scenario.
 2. Ensure the `wrangler.toml` matches your desired worker deployment
    configuration.
 
-2. Deploy the worker and configuration using `make deploy`.
+3. Deploy the worker and configuration using `make deploy`.
