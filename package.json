@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240821.1",
+    "@cloudflare/workers-types": "^4.20250701.0",
     "@evanpurkhiser/eslint-config": "^0.25.0",
     "eslint": "^9.30.0",
-    "prettier": "^3.3.3",
-    "typescript": "^5.6.2",
-    "wrangler": "^4.16.1"
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.22.0"
   },
   "dependencies": {
     "@types/html-minifier-terser": "^7.0.2",
