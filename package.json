@@ -1,18 +1,19 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "recovery",
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250701.0",
-    "@evanpurkhiser/eslint-config": "^0.25.0",
-    "eslint": "^9.30.0",
+    "@cloudflare/workers-types": "^4.20250702.0",
+    "@evanpurkhiser/eslint-config": "^0.27.0",
+    "eslint": "^9.30.1",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3",
     "wrangler": "^4.22.0"
   },
   "dependencies": {
     "@types/html-minifier-terser": "^7.0.2",
-    "@types/node": "^24.0.8",
+    "@types/node": "^24.0.10",
     "@types/node-gzip": "^1.1.3",
     "@types/showdown": "^2.0.6",
     "html-minifier-terser": "^7.2.0",
@@ -21,7 +22,7 @@
     "telegram-escape": "^1.1.1"
   },
   "volta": {
-    "node": "24.3.0",
-    "yarn": "1.22.19"
-  }
+    "node": "24.3.0"
+  },
+  "packageManager": "pnpm@10.12.4"
 }
