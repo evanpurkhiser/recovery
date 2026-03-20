@@ -38,7 +38,7 @@ const deriveKey = (passwordKey: CryptoKey, salt: ArrayBuffer, keyUsage: string[]
     passwordKey,
     {name: 'AES-GCM', length: 256},
     false,
-    keyUsage
+    keyUsage,
   );
 
 const getPasswordKey = (password: string) =>
@@ -59,7 +59,7 @@ async function decryptData(encryptedData: string, password: string) {
   const decryptedContent = await crypto.subtle.decrypt(
     {name: 'AES-GCM', iv},
     aesKey,
-    data
+    data,
   );
   return decryptedContent;
 }
@@ -124,7 +124,7 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => 
     try {
       const test = await fetch(
         `https://api.telegram.org/bot${token}/sendMessage`,
-        options
+        options,
       );
       console.log(await test.json());
     } catch {

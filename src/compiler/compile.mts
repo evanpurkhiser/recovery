@@ -56,7 +56,7 @@ const deriveKey = (passwordKey: CryptoKey, salt: Uint8Array, keyUsage: KeyUsage[
     passwordKey,
     {name: 'AES-GCM', length: 256},
     false,
-    keyUsage
+    keyUsage,
   );
 
 /**
@@ -78,14 +78,14 @@ async function encryptData(secretData: Uint8Array, password: string) {
   const encryptedContent = await crypto.subtle.encrypt(
     {name: 'AES-GCM', iv},
     aesKey,
-    secretData
+    secretData,
   );
 
   const encryptedContentArr = new Uint8Array(encryptedContent);
 
   // Pack the encrypted data with the salt and iv
   const buff = new Uint8Array(
-    salt.byteLength + iv.byteLength + encryptedContentArr.byteLength
+    salt.byteLength + iv.byteLength + encryptedContentArr.byteLength,
   );
   buff.set(salt, 0);
   buff.set(iv, salt.byteLength);
