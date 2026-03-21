@@ -1,11 +1,12 @@
 import {minify, type Options} from 'html-minifier-terser';
+import {gzip} from 'node-gzip';
+import showdown from 'showdown';
+
 import {exec} from 'node:child_process';
 import {webcrypto as crypto} from 'node:crypto';
 import {promises as fs} from 'node:fs';
 import {resolve} from 'node:path';
 import {promisify} from 'node:util';
-import {gzip} from 'node-gzip';
-import showdown from 'showdown';
 
 const asyncExec = promisify(exec);
 
