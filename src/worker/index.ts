@@ -31,7 +31,7 @@ const deriveKey = (passwordKey: CryptoKey, salt: ArrayBuffer, keyUsage: string[]
   crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: salt,
+      salt,
       iterations: encryptionIterations,
       hash: 'SHA-256',
     },
