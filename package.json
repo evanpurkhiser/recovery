@@ -3,6 +3,16 @@
   "name": "recovery",
   "version": "0.0.0",
   "private": true,
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.15.0"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.0.0"
+    }
+  },
   "scripts": {
     "lint": "oxlint src/",
     "format": "oxfmt .",
@@ -25,9 +35,5 @@
     "oxlint": "^1.62.0",
     "typescript": "^5.8.3",
     "wrangler": "^4.22.0"
-  },
-  "volta": {
-    "node": "24.3.0"
-  },
-  "packageManager": "pnpm@10.12.4"
+  }
 }
