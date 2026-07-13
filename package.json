@@ -3,16 +3,6 @@
   "name": "recovery",
   "version": "0.0.0",
   "private": true,
-  "devEngines": {
-    "runtime": {
-      "name": "node",
-      "version": "^24.15.0"
-    },
-    "packageManager": {
-      "name": "pnpm",
-      "version": "11.0.0"
-    }
-  },
   "scripts": {
     "lint": "oxlint src/",
     "format": "oxfmt .",
@@ -35,5 +25,15 @@
     "oxlint": "^1.62.0",
     "typescript": "^5.8.3",
     "wrangler": "^4.22.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.0.0"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "^24.15.0"
+    }
   }
 }
