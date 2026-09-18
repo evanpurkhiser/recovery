@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250702.0",
-    "@evanpurkhiser/oxc-config": "^0.8.0",
+    "@evanpurkhiser/oxc-config": "^0.16.0",
     "oxfmt": "^0.47.0",
     "oxlint": "^1.62.0",
     "typescript": "^5.8.3",
