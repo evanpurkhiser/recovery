@@ -1,10 +1,24 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import {parseBasicAuthorization} from '../src/worker/auth.ts';
+import {
+  createBasicAuthorizationChallenge,
+  parseBasicAuthorization,
+} from '../src/worker/auth.ts';
 
 const basic = (credentials: string) =>
   `Basic ${Buffer.from(credentials, 'utf8').toString('base64')}`;
+
+test('prevents authorization challenges from being cached', () => {
+  const response = createBasicAuthorizationChallenge();
+
+  assert.equal(response.status, 401);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.equal(
+    response.headers.get('www-authenticate'),
+    'Basic realm="Recovery", charset="UTF-8"',
+  );
+});
 
 test('reports a missing authorization header', () => {
   assert.deepEqual(parseBasicAuthorization(null), {status: 'missing'});

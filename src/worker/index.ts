@@ -1,6 +1,6 @@
 import {escapeMarkdown} from 'telegram-escape';
 
-import {parseBasicAuthorization} from './auth';
+import {createBasicAuthorizationChallenge, parseBasicAuthorization} from './auth';
 
 export interface Env {
   /**
@@ -67,23 +67,13 @@ async function decryptData(encryptedData: string, password: string) {
 }
 
 /**
- * Return a response that requires authorization via WWW-Authenticate Basic.
- */
-function reauthorize() {
-  const response = new Response('Authorization Required', {status: 401});
-  response.headers.set('WWW-Authenticate', 'Basic realm="Recovery", charset="UTF-8"');
-
-  return response;
-}
-
-/**
  * Main worker request handler
  */
 const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env, context) => {
   const authorization = parseBasicAuthorization(request.headers.get('authorization'));
 
   if (authorization.status !== 'credentials') {
-    return reauthorize();
+    return createBasicAuthorizationChallenge();
   }
 
   const {username, passphrase} = authorization;
@@ -135,7 +125,7 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env, con
   // Invalid username
   if (username !== env.USERNAME) {
     context.waitUntil(notifyTelegram('Invalid username attempt'));
-    return reauthorize();
+    return createBasicAuthorizationChallenge();
   }
 
   // Attempt to decode the website with the provided passphrase
@@ -155,7 +145,7 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env, con
   }
 
   context.waitUntil(notifyTelegram('Invalid password attempt'));
-  return reauthorize();
+  return createBasicAuthorizationChallenge();
 };
 
 export default {fetch: handleRequest};
