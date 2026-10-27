@@ -79,7 +79,7 @@ function reauthorize() {
 /**
  * Main worker request handler
  */
-const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => {
+const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env, context) => {
   const authorization = parseBasicAuthorization(request.headers.get('authorization'));
 
   if (authorization.status !== 'credentials') {
@@ -130,13 +130,11 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => 
     } catch {
       // Nothing to do if we failed
     }
-
-    return null;
   }
 
   // Invalid username
   if (username !== env.USERNAME) {
-    await notifyTelegram('Invalid username attempt');
+    context.waitUntil(notifyTelegram('Invalid username attempt'));
     return reauthorize();
   }
 
@@ -149,14 +147,14 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => 
       ['Cache-Control', 'no-store'],
     ]);
 
-    await notifyTelegram('ACCESS GRANTED');
+    context.waitUntil(notifyTelegram('ACCESS GRANTED'));
 
     return new Response(html, {status: 200, headers, encodeBody: 'manual'});
   } catch {
     // Nothing to do if we failed to decrypt
   }
 
-  await notifyTelegram('Invalid password attempt');
+  context.waitUntil(notifyTelegram('Invalid password attempt'));
   return reauthorize();
 };
 
