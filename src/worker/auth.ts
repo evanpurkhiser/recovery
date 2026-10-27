@@ -5,6 +5,16 @@ export type BasicAuthorization =
   | {status: 'malformed'}
   | {status: 'credentials'; username: string; passphrase: string};
 
+export function createBasicAuthorizationChallenge() {
+  return new Response('Authorization Required', {
+    status: 401,
+    headers: {
+      'Cache-Control': 'no-store',
+      'WWW-Authenticate': 'Basic realm="Recovery", charset="UTF-8"',
+    },
+  });
+}
+
 export function parseBasicAuthorization(header: string | null): BasicAuthorization {
   if (header === null) {
     return {status: 'missing'};
