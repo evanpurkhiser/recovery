@@ -1,5 +1,7 @@
 import {escapeMarkdown} from 'telegram-escape';
 
+import {parseBasicAuthorization} from './auth';
+
 export interface Env {
   /**
    * The username to authenticate as.
@@ -69,7 +71,7 @@ async function decryptData(encryptedData: string, password: string) {
  */
 function reauthorize() {
   const response = new Response('Authorization Required', {status: 401});
-  response.headers.set('WWW-Authenticate', 'Basic');
+  response.headers.set('WWW-Authenticate', 'Basic realm="Recovery", charset="UTF-8"');
 
   return response;
 }
@@ -78,15 +80,13 @@ function reauthorize() {
  * Main worker request handler
  */
 const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env) => {
-  const authorization = request.headers.get('authorization');
+  const authorization = parseBasicAuthorization(request.headers.get('authorization'));
 
-  // No authorization passed, request authorization
-  if (authorization === null) {
+  if (authorization.status !== 'credentials') {
     return reauthorize();
   }
 
-  // Extract the username and password from the authorization header
-  const [username, passphrase] = atob(authorization.split(' ')[1]).split(':');
+  const {username, passphrase} = authorization;
 
   const details = {
     location: `${request.cf?.city}, ${request.cf?.region}, ${request.cf?.country}`,

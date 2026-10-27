@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "lint": "oxlint src/",
+    "test": "node --test test/*.test.ts",
     "format": "oxfmt .",
     "format:check": "oxfmt --check ."
   },
