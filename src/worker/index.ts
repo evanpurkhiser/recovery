@@ -29,6 +29,15 @@ const encoder = new TextEncoder();
 
 const base64ToBuffer = (b64: string) => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
 
+async function timingSafeStringEqual(left: string, right: string) {
+  const [leftDigest, rightDigest] = await Promise.all([
+    crypto.subtle.digest('SHA-256', encoder.encode(left)),
+    crypto.subtle.digest('SHA-256', encoder.encode(right)),
+  ]);
+
+  return crypto.subtle.timingSafeEqual(leftDigest, rightDigest);
+}
+
 const deriveKey = (passwordKey: CryptoKey, salt: ArrayBuffer, keyUsage: string[]) =>
   crypto.subtle.deriveKey(
     {
@@ -133,7 +142,8 @@ const handleRequest: ExportedHandlerFetchHandler<Env> = async (request, env, con
   }
 
   // Invalid username
-  if (username !== env.USERNAME) {
+  const validUser = await timingSafeStringEqual(username, env.USERNAME);
+  if (!validUser) {
     context.waitUntil(notifyTelegram('Invalid username attempt'));
     return reauthorize();
   }
